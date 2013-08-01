@@ -6,4 +6,3 @@ app.get('/', function(req, res) {
 });
 
 app.listen(8080);
-console.log('Express server started on port %s', app.address().port);
