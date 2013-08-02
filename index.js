@@ -1,10 +1,19 @@
 var express = require('express');
 var app = express();
 
-app.use(express.logger());
-
-app.get('/', function(req, res) {
-	res.send('Hello World');
+app.configure(function() {
+	app.set('port', 1337);
+	app.set('views', __dirname + '/views');
+	app.use(express.logger());
+	//app.set('view engine', 'html');
 });
 
-app.listen(8080);
+app.get('/', function(req, res) {
+	res.sendfile('index.html');
+});
+
+app.get('/hello', function(req, res) {
+	res.sendfile('hello.html');
+});
+
+app.listen(app.get('port'));
