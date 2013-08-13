@@ -1,0 +1,21 @@
+<div class="container">
+	<form ng-submit="post_mod()">
+		<legend>~Post a Node Module~</legend>
+		<fieldset>
+			<div class="form-group">
+				<label for="name_label">Module name</label>
+				<input type="text" class="form-control" id="name_label" placeholder="Enter module name" ng-model="mod_name">
+			</div>
+			<div class="form-group">
+				<label for="id_label">Module id</label>
+				<input type="text" class="form-control" id="id_label" placeholder="Enter module id" ng-model="mod_id">
+			</div>
+			<button type="submit" class="btn btn-default">Submit</button>
+		</fieldset>
+	</form>
+	<ul>
+		<li ng-repeat="mod in mods">
+			<p>{{mod.name}}</p>
+		</li>
+	</ul>
+</div>

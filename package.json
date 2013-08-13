@@ -1,0 +1,9 @@
+{
+	"name": "node_hello_world",
+	"version": "0.0.1",
+	"author": "phillip <phillip.chen@hotmail.com>",
+	"description": "testing stuff",
+	"dependencies": {
+		"express": "3.x"
+	}
+}
