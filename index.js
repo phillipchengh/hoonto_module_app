@@ -36,7 +36,8 @@ app.get('/query', function(req, res) {
 		port: 5432
 	});
 	client.connect();
-	var query_text = 'SELECT * FROM mods_list'
+	var query_text = 
+	'SELECT mod_name, mod_desc FROM mods_list';
 	var query = client.query(query_text);
 	query.on('row', function(row, result) {
 		result.addRow(row);
@@ -60,20 +61,40 @@ app.post('/query', function(req, res) {
 		port: 5432
 	});
 	client.connect();
-	console.log(req.query);
-	var query_text = 'INSERT INTO mods_list(mod_name, mod_desc) VALUES($1, $2)';
-		//req.params.mod_name + ', ' + req.params.mod_desc + ')';
+	//console.log(req.query);
+	var query_text = 
+	//'INSERT INTO mods_list(mod_name, mod_desc) VALUES($1, $2) RETURNING mod_name, mod_desc';
+	'INSERT INTO mods_list(mod_name, mod_desc) VALUES($1, $2)';
 	var query = client.query({
 		text: query_text,
 		values: [req.query.mod_name, req.query.mod_desc]
 	});
-	var query = client.query(query_text);
-	query.on('error', function() {
+	query.on('row', function(row, result) {
+		result.addRow(row);
+	});
+	query.on('error', function(error) {
 		console.error("Query error");
+		console.error(error);
+		res.send(500, {error: 'Request caused explosion.'});
 	});
 	query.on('end', function(result) {
+		var query_text2 = 
+		'SELECT mod_name, mod_desc FROM mods_list WHERE mod_name = $1';
+		var query2 = client.query({
+			text: query_text2,
+			values: [req.query.mod_name]
+		});
+		query2.on('row', function(row2, result2) {
+			result2.addRow(row2);
+		});
+		query2.on('error', function() {
+			console.error("Callback query error");
+		});
+		query2.on('end', function(result2) {
+			res.send(result2.rows);
+			client.end();
+		});
 		//res.send(result.rows);
-		client.end();
 	});
 });
 

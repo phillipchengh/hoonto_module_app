@@ -4,18 +4,20 @@
 		<fieldset>
 			<div class="form-group">
 				<label for="name_label">Module name</label>
-				<input type="text" class="form-control" id="name_label" placeholder="Enter module name" ng-model="mod_name">
+				<input type="text" class="form-control" id="name_label" placeholder="Enter module name" ng-model="mod_name" maxlength="24">
 			</div>
 			<div class="form-group">
 				<label for="id_label">Module description</label>
-				<input type="text" class="form-control" id="id_label" placeholder="Enter module description" ng-model="mod_desc">
+				<input type="text" class="form-control" id="id_label" placeholder="Enter module description" ng-model="mod_desc" maxlength="150">
 			</div>
 			<button type="submit" class="btn btn-default">Submit</button>
 		</fieldset>
 	</form>
 	<ul>
 		<li ng-repeat="mod in mods">
-			<p>{{mod.mod_name}} - {{mod.mod_desc}}</p>
+			<div class="row">
+				<p>{{mod.mod_name}} - {{mod.mod_desc}}</p>
+			</div>
 		</li>
 	</ul>
 </div>

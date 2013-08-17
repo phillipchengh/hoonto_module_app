@@ -6,10 +6,18 @@ function mods_list_ctrl($scope, Node_Module) {
 	$scope.mod_name = "";
 	$scope.mod_desc = "";
 	$scope.post_mod = function() {
-		//alert("You submitted " + this.mod_name + " with desc: " + this.mod_desc);
 		//this.mods = Node_Module.query({mod_id:'mods.json'});
-		Node_Module.save({mod_name: this.mod_name, mod_desc: this.mod_desc});
-		this.mods = Node_Module.query();
+		Node_Module.save({mod_name: $scope.mod_name, mod_desc: $scope.mod_desc},
+			function(data) {
+				console.log(data, status, headers, config);
+				//$scope.mods[$scope.mods.length] = data;
+				$scope.mods[$scope.mods.length] = {mod_name: $scope.mod_name, mod_desc: $scope.mod_desc};
+			},
+			function(data, status, headers, config) {
+				alert("You submitted an explosion.");
+				console.error(data);
+			});
+		//this.mods = Node_Module.query();
 	};
 }
 
