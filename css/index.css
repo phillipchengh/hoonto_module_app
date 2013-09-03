@@ -12,4 +12,10 @@ body {
 
 .mod-block {
 	border: 1px solid black;
+	margin-bottom: 5px;
+	padding: 5px;
+}
+
+.mod-p {
+	margin: 0px;
 }

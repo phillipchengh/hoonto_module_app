@@ -31,7 +31,7 @@ app.get('/query', function(req, res) {
 	var client = new pg.Client({
 		user: "phillip",
 		password: "a1xie4rC",
-		database: "node_hello_world_db",
+		database: "mod_db",
 		host: "localhost",
 		port: 5432
 	});
@@ -56,7 +56,7 @@ app.post('/query', function(req, res) {
 	var client = new pg.Client({
 		user: "phillip",
 		password: "a1xie4rC",
-		database: "node_hello_world_db",
+		database: "mod_db",
 		host: "localhost",
 		port: 5432
 	});

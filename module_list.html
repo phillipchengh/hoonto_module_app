@@ -14,10 +14,8 @@
 		</fieldset>
 	</form>
 	<ul>
-		<li ng-repeat="mod in mods">
-			<div class="mod-block">
-				<p>{{mod.mod_name}} - {{mod.mod_desc}}</p>
-			</div>
-		</li>
+		<div class="mod-block" ng-repeat="mod in mods">
+			<p class="mod-p">{{mod.mod_name}} - {{mod.mod_desc}}</p>
+		</div>
 	</ul>
 </div>
