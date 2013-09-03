@@ -9,3 +9,7 @@ body {
 .navbar-form input[type="password"] {
   width: 180px;
 }
+
+.mod-block {
+	border: 1px solid black;
+}
