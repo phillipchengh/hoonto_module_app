@@ -1,0 +1,6 @@
+#!/bin/bash
+
+pg_dump mod_db > ./data/pg_info.sql
+git add *
+git commit -m "saving"
+git push

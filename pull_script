@@ -1,0 +1,4 @@
+#!/bin/bash
+
+git pull
+psql mod_db < ./data/pg_info.sql
