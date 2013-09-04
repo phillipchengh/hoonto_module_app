@@ -34,7 +34,8 @@ SET default_with_oids = false;
 
 CREATE TABLE mods_list (
     mod_name character varying(24),
-    mod_desc character varying(150)
+    mod_desc character varying(150),
+    add_date date DEFAULT ('now'::text)::date NOT NULL
 );
 
 
@@ -44,18 +45,18 @@ ALTER TABLE public.mods_list OWNER TO phillip;
 -- Data for Name: mods_list; Type: TABLE DATA; Schema: public; Owner: phillip
 --
 
-COPY mods_list (mod_name, mod_desc) FROM stdin;
-Super Module	Adds a cape to node full of hope
-Planet Express	Reliable interplanetary delivery. Serving the Milky Way and Beyond!
-<>JS	Model. View. Whatever.
-Fourth	I do not like the number before this.
-Test Module	This module's entire purpose is just to test POST.
-The Test Returns!	Just another description.
-Node Module	I've got it.
-Another Node Module	Look even more!
-24 Char Not Enough	It really isn't.
-Still Not Enough	Will this work finally?
-One More Time	Not the daft punk song.
+COPY mods_list (mod_name, mod_desc, add_date) FROM stdin;
+Super Module	Adds a cape to node full of hope	2013-09-03
+Planet Express	Reliable interplanetary delivery. Serving the Milky Way and Beyond!	2013-09-03
+<>JS	Model. View. Whatever.	2013-09-03
+Fourth	I do not like the number before this.	2013-09-03
+Test Module	This module's entire purpose is just to test POST.	2013-09-03
+The Test Returns!	Just another description.	2013-09-03
+Node Module	I've got it.	2013-09-03
+Another Node Module	Look even more!	2013-09-03
+24 Char Not Enough	It really isn't.	2013-09-03
+Still Not Enough	Will this work finally?	2013-09-03
+One More Time	Not the daft punk song.	2013-09-03
 \.
 
 
