@@ -2,5 +2,9 @@
 
 pg_dump mod_db > ./data/pg_info.sql
 git add *
-git commit -m "saving"
+if [ $# -eq 0 ]; then
+	git commit -m "saving"
+else
+	git commit -m $1 
+fi
 git push

@@ -37,9 +37,12 @@ app.get('/query', function(req, res) {
 	});
 	client.connect();
 	var query_text = 
-	'SELECT mod_name, mod_desc FROM mods_list';
+	'SELECT name, description, extract(\'epoch\' FROM add_timestamp) FROM mods_list';
 	var query = client.query(query_text);
 	query.on('row', function(row, result) {
+		var date = new Date(row.date_part);
+		var month = date.getMonth() + 1;
+		row.date_part = month + '-' + date.getDate() + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes();
 		result.addRow(row);
 	});
 	query.on('error', function() {
@@ -63,8 +66,8 @@ app.post('/query', function(req, res) {
 	client.connect();
 	//console.log(req.query);
 	var query_text = 
-	//'INSERT INTO mods_list(mod_name, mod_desc) VALUES($1, $2) RETURNING mod_name, mod_desc';
-	'INSERT INTO mods_list(mod_name, mod_desc) VALUES($1, $2)';
+	//'INSERT INTO mods_list(name, description) VALUES($1, $2) RETURNING mod_name, mod_desc';
+	'INSERT INTO mods_list(name, description) VALUES($1, $2)';
 	var query = client.query({
 		text: query_text,
 		values: [req.query.mod_name, req.query.mod_desc]
@@ -79,7 +82,7 @@ app.post('/query', function(req, res) {
 	});
 	query.on('end', function(result) {
 		var query_text2 = 
-		'SELECT mod_name, mod_desc FROM mods_list WHERE mod_name = $1';
+		'SELECT name, description FROM mods_list WHERE name = $1';
 		var query2 = client.query({
 			text: query_text2,
 			values: [req.query.mod_name]
