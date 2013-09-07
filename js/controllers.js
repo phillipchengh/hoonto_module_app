@@ -15,7 +15,7 @@ function mods_list_ctrl($scope, Node_Module) {
 				$scope.mod_list[i].detail_show = false;
 			}
 	}, function error() {
-		console.log("error worked");
+		console.log("Could not query initial modules.");
 	});
 
 	$scope.button_class = function(mod) {
@@ -67,26 +67,25 @@ function mods_list_ctrl($scope, Node_Module) {
 	};
 
 	$scope.show_more_mods = function() {
-		$scope.mod_offset += 5;
+		$scope.mod_offset = $scope.mod_list.length;
 		Node_Module.query({mod_offset: $scope.mod_offset},
 			function success(data) {
 				if (data.length < 1) {
 					return;
 				}
+				var index_offset = $scope.mod_list.length;
 				for (var i = 0; i < data.length; i++) {
-					data[i].mod_index = i;
+					data[i].mod_index = i + index_offset;
 					data[i].panel_button = "Add";
 					data[i].more_button = "More";
 					data[i].detail_show = false;
 				}
 				$scope.mod_list = $scope.mod_list.concat(data);
 			}, function error() {
-				console.log("error worked");
+				console.log("Could not query more modules.");
 		});
-		// });
 	};
 }
 
 function mods_detail_ctrl($scope, $routeParams, Node_Module) {
-	//$scope.mod_list = 
 }

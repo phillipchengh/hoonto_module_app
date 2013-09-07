@@ -2,7 +2,7 @@
 	"name": "node_hello_world",
 	"version": "0.0.1",
 	"author": "phillip <phillip.chen@hotmail.com>",
-	"description": "testing stuff",
+	"description": "Hoonto Module App",
 	"dependencies": {
 		"express": "3.x",
 		"pg": "2.x"

@@ -12,11 +12,11 @@ body {
 
 .mod-panel {
 	height: 100%;
-	width: 20%;
+	width: 15%;
 	display: inline;
 	float: left;
 	margin-top: 5px;
-	margin-right: 5%;
+	margin-right: 10%;
 	position: fixed;
 }
 
