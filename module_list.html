@@ -1,5 +1,5 @@
 <div class="container">
-	<form ng-submit="post_mod()">
+	<!-- <form ng-submit="post_mod()">
 		<legend>~Post a Node Module~</legend>
 		<fieldset>
 			<div class="form-group">
@@ -12,10 +12,25 @@
 			</div>
 			<button type="submit" class="btn btn-default">Submit</button>
 		</fieldset>
-	</form>
-	<ul>
-		<div class="mod-block" ng-repeat="mod in mods">
-			<p class="mod-p">{{mod.name}} - {{mod.description}} - {{mod.date_part}}</p>
+	</form> -->
+	
+	<div class="mod-panel">
+		<div class="mod-panel-item">
+			<div class="mod-name">Module Panel</div>
 		</div>
-	</ul>
+		<div class="mod-panel-item" ng-repeat="mod in mod_panel">
+			<button class="btn btn-danger" ng-click="remove_from_panel(mod)">Remove</button>
+			<p class="mod-p">{{mod.name}}</p>
+		</div>
+	</div>
+	<div class="mod-block" ng-repeat="mod in mod_list">
+		<button ng-class="button_class(mod)" ng-click="panel_op(mod)">{{mod.panel_button}}</button>
+		<span class="mod-name">{{mod.name}}</span>
+		<p class="mod-desc">{{mod.description}}</p>
+		<a ng-click="more_toggle(mod)">{{mod.more_button}}</a>
+		<p class="mod-detail" ng-show="mod.detail_show">Version: {{mod.version}}<br>Downloads: {{mod.downloads}}<br>Added: {{mod.add_date}}<br>Last Modified: {{mod.mod_date}}</p>
+	</div>
+	<div class="mod-block">
+		<button ng-click="show_more_mods()">Show more</button>
+	</div>
 </div>

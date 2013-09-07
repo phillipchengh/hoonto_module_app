@@ -10,12 +10,54 @@ body {
   width: 180px;
 }
 
-.mod-block {
-	border: 1px solid black;
-	margin-bottom: 5px;
-	padding: 5px;
+.mod-panel {
+	height: 100%;
+	width: 20%;
+	display: inline;
+	float: left;
+	margin-top: 5px;
+	margin-right: 5%;
+	position: fixed;
 }
 
-.mod-p {
-	margin: 0px;
+.mod-panel-item {
+	height: auto;
+	width: auto;
+	padding: 5px;
+	border-left: 1px solid black;
+	border-right: 1px solid black;
+	border-bottom: 1px solid black;
+}
+
+.mod-panel-item:first-child {
+	border: 1px solid black;
+}
+
+.mod-container {
+	height: auto;
+	width: auto;
+}
+
+.mod-block {
+	width: 75%;
+	border: 1px solid black;
+	margin-top: 5px;
+	padding: 5px;
+	float: right;
+	/*display: inline;*/
+}
+
+.mod-block:first-child {
+}
+
+.mod-block .mod-name {
+	font-size: 20px;
+}
+
+.mod-block .mod-desc {
+	font-size: 16px;
+}
+
+.mod-block .mod-detail {
+	font-size: 12px;
 }

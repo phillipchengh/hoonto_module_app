@@ -37,12 +37,21 @@ app.get('/query', function(req, res) {
 	});
 	client.connect();
 	var query_text = 
-	'SELECT name, description, extract(\'epoch\' FROM add_timestamp) FROM mods_list';
-	var query = client.query(query_text);
+	'SELECT name, description, version, downloads, extract(\'epoch\' FROM add_timestamp) AS add_date, extract(\'epoch\' FROM mod_timestamp) AS mod_date FROM mods_list ORDER BY downloads DESC LIMIT 5 OFFSET $1';
+	var query = client.query({
+		text: query_text,
+		values: [req.query.mod_offset]
+	});
+	console.log(query);
 	query.on('row', function(row, result) {
-		var date = new Date(row.date_part);
-		var month = date.getMonth() + 1;
-		row.date_part = month + '-' + date.getDate() + '-' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes();
+		var add_date = new Date(row.add_date*1000);
+		var month = add_date.getMonth() + 1;
+		row.add_date =
+		month + '-' + add_date.getDate() + '-' + add_date.getFullYear() + ' ' + add_date.getHours() + ':' + add_date.getMinutes();
+		var mod_date = new Date(row.mod_date*1000);
+		var month = mod_date.getMonth() + 1;
+		row.mod_date =
+		month + '-' + mod_date.getDate() + '-' + mod_date.getFullYear() + ' ' + mod_date.getHours() + ':' + mod_date.getMinutes();
 		result.addRow(row);
 	});
 	query.on('error', function() {
@@ -50,6 +59,7 @@ app.get('/query', function(req, res) {
 	});
 	//client.end.bind(client)
 	query.on('end', function(result) {
+		console.log(result.rows);
 		res.send(result.rows);
 		client.end();
 	});
