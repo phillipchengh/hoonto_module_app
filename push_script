@@ -5,6 +5,6 @@ git add *
 if [ $# -eq 0 ]; then
 	git commit -m "saving"
 else
-	git commit -m $1 
+	git commit -m $@
 fi
 git push

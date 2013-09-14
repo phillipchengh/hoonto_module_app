@@ -16,21 +16,54 @@
 	
 	<div class="mod-panel">
 		<div class="mod-panel-item">
+			<ul class="nav nav-tabs" style="float: center;">
+				<li ng-class="views['List']"><a ng-click="change_view('List')">List</a></li>
+				<li ng-class="views['Detail']"><a ng-click="change_view('Detail')">Detail</a></li>
+				<li ng-class="views['Compare']"><a ng-click="change_view('Compare')">Compare</a></li>
+			</ul>
 			<div class="mod-name">Module Panel</div>
+			<!-- <button ng-click="change_view()">{{view_state}}</button> -->
 		</div>
 		<div class="mod-panel-item" ng-repeat="mod in mod_panel">
-			<button class="btn btn-danger" ng-click="remove_from_panel(mod)">Remove</button>
 			<p class="mod-p">{{mod.name}}</p>
+			<button ng-click="remove_from_panel(mod)">Remove</button>
 		</div>
 	</div>
-	<div class="mod-block" ng-repeat="mod in mod_list">
-		<button ng-class="button_class(mod)" ng-click="panel_op(mod)">{{mod.panel_button}}</button>
-		<span class="mod-name">{{mod.name}}</span>
-		<p class="mod-desc">{{mod.description}}</p>
-		<a ng-click="more_toggle(mod)">{{mod.more_button}}</a>
-		<p class="mod-detail" ng-show="mod.detail_show">Version: {{mod.version}}<br>Downloads: {{mod.downloads}}<br>Added: {{mod.add_date}}<br>Last Modified: {{mod.mod_date}}</p>
-	</div>
-	<div class="mod-block">
-		<button ng-click="show_more_mods()">Show more</button>
+	<div ng-switch on="view_state">
+		<div ng-switch-default class="mod-container">
+		<div class="mod-block">
+			<span class="mod-name">Modules</span>
+			<p class="mod-desc">List of Modules</p>
+			<div class="btn-group">
+				<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
+					Order by: {{mod_order}}
+					<span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu">
+					<li><a ng-click="order_by('Downloads')">Downloads</a></li>
+					<li><a ng-click="order_by('Name')">Name</a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="mod-block" ng-repeat="mod in mod_list">
+			<button ng-class="button_class(mod)" ng-click="panel_op(mod)">{{mod.panel_button}}</button>
+			<span class="mod-name">{{mod.name}} Downloads: {{mod.downloads}}<br></span>
+			<p class="mod-desc">{{mod.description}}</p>
+			<a ng-click="more_toggle(mod)">{{mod.more_button}}</a>
+			<p class="mod-detail" ng-show="mod.show_more">Version: {{mod.version}}<br>Added: {{mod.add_date}}<br>Last Modified: {{mod.mod_date}}</p>
+		</div>
+		<div class="mod-block">
+			<button ng-click="show_more_mods()">Show more</button>
+		</div>
+		</div>
+		<div ng-switch-when="Detail" class="mod-container">
+			<div class="mod-block">
+				
+			</div>
+		</div>		
+		<div ng-switch-when="Compare" class="mod-container">
+			<div class="mod-compare-block" ng-repeat="mod in mod_compare_list">
+			</div>
+		</div>
 	</div>
 </div>

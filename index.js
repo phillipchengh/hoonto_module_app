@@ -3,7 +3,7 @@ var app = express();
 
 var pg = require('pg');
 //var pg_url = process.env.DATABASE_URL || "postgres://phillip:a1xie4rC@localhost:5432/node_hello_world_db";
-
+	
 app.configure(function() {
 	app.set('port', 1337);
 	app.set('views', __dirname + '/views');
@@ -36,13 +36,19 @@ app.get('/query', function(req, res) {
 		port: 5432
 	});
 	client.connect();
-	var query_text = 
-	'SELECT name, description, version, downloads, extract(\'epoch\' FROM add_timestamp) AS add_date, extract(\'epoch\' FROM mod_timestamp) AS mod_date FROM mods_list ORDER BY downloads DESC LIMIT 5 OFFSET $1';
+	var query_text = "";
+	if (req.query.mod_order === "Downloads") {
+		query_text = 
+		'SELECT name, description, version, downloads, extract(\'epoch\' FROM add_timestamp) AS add_date, extract(\'epoch\' FROM mod_timestamp) AS mod_date FROM mods_list ORDER BY downloads DESC LIMIT 5 OFFSET $1';
+	} else if (req.query.mod_order === "Name") {
+		query_text = 
+		'SELECT name, description, version, downloads, extract(\'epoch\' FROM add_timestamp) AS add_date, extract(\'epoch\' FROM mod_timestamp) AS mod_date FROM mods_list ORDER BY name LIMIT 5 OFFSET $1';
+	}	
 	var query = client.query({
 		text: query_text,
 		values: [req.query.mod_offset]
 	});
-	console.log(query);
+	// console.log(query.values);
 	query.on('row', function(row, result) {
 		var add_date = new Date(row.add_date*1000);
 		var month = add_date.getMonth() + 1;
@@ -59,9 +65,9 @@ app.get('/query', function(req, res) {
 	});
 	//client.end.bind(client)
 	query.on('end', function(result) {
-		console.log(result.rows);
+		// console.log(result.rows);
 		res.send(result.rows);
-		client.end();
+		// client.end();
 	});
 });
 

@@ -12,7 +12,7 @@ body {
 
 .mod-panel {
 	height: 100%;
-	width: 15%;
+	width: 16.4%;
 	display: inline;
 	float: left;
 	margin-top: 5px;
@@ -31,23 +31,32 @@ body {
 
 .mod-panel-item:first-child {
 	border: 1px solid black;
+	padding: 0px;
+	float: center;
 }
+/*
+.mod-bar {
+	height: auto;
+	width: 80%;
+	float: right;
+	padding: 5px;	
+}*/
 
 .mod-container {
 	height: auto;
-	width: auto;
+	width: 75%;
+	float: right;
+	padding: 5px;
 }
 
 .mod-block {
-	width: 75%;
 	border: 1px solid black;
-	margin-top: 5px;
+	margin-bottom: 5px;
 	padding: 5px;
-	float: right;
-	/*display: inline;*/
 }
 
 .mod-block:first-child {
+	/*position: fixed;*/
 }
 
 .mod-block .mod-name {
@@ -60,4 +69,9 @@ body {
 
 .mod-block .mod-detail {
 	font-size: 12px;
+}
+
+.mod-compare-block {
+	border: 1px solid black;
+	padding: 5px;
 }
