@@ -7,7 +7,7 @@ function mods_list_ctrl($scope, Node_Module) {
 	$scope.mod_date = "";
 	$scope.mod_offset = 0;
 	$scope.mod_order = "Downloads";
-	$scope.views = {"List": "active", "Detail": "", "Compare": "disabled"};
+	$scope.views = {"List": "active", "Detail": "disabled", "Compare": "disabled"};
 	$scope.view_state = "List";
 	$scope.mod_list = Node_Module.query({mod_offset: $scope.mod_offset, mod_order: $scope.mod_order},
 		function success() {
@@ -47,11 +47,15 @@ function mods_list_ctrl($scope, Node_Module) {
 		if ($scope.view_state === view) {
 			return;
 		}
-		if (($scope.mod_panel.length < 2) && (view === "Compare")) {
-			alert("Need at least two items to compare!")
+		if (($scope.mod_panel.length < 1) && (view === "Detail")) {
 			return;
 		}
-		$scope.views[$scope.view_state] = "";
+		if (($scope.mod_panel.length < 2) && (view === "Compare")) {
+			return;
+		}
+		if ($scope.views[$scope.view_state] === "active") {
+			$scope.views[$scope.view_state] = "";
+		}
 		$scope.view_state = view;
 		$scope.views[$scope.view_state] = "active";
 	}
@@ -86,11 +90,28 @@ function mods_list_ctrl($scope, Node_Module) {
 		}
 	}
 
+	$scope.add_to_panel = function(mod) {
+		if (($scope.mod_panel.length >= 0) && ($scope.views["Detail"] === "disabled")) {
+			$scope.views["Detail"] = "";
+		}
+		if (($scope.mod_panel.length >= 1) && ($scope.views["Compare"] === "disabled")) {
+			$scope.views["Compare"] = "";
+		}
+		$scope.mod_panel.push(mod);
+		$scope.mod_list[mod.mod_index].panel_button = "Remove";
+	}
+
 	$scope.remove_from_panel = function(mod) {
-		if (($scope.mod_panel.length < 3) && ($scope.views["Compare"] !== "disabled")) {
+		if (($scope.mod_panel.length <= 2) && ($scope.views["Compare"] !== "disabled")) {
 			$scope.views["Compare"] = "disabled";
 		}
-		if (($scope.mod_panel.length < 3) && ($scope.view_state === "Compare")) {
+		if (($scope.mod_panel.length === 1) && ($scope.view_state === "Compare")) {
+			$scope.change_view("Detail");
+		}
+		if ($scope.mod_panel.length <= 1) {
+			$scope.views["Detail"] = "disabled";
+		}
+		if (($scope.mod_panel.length <= 1) && ($scope.view_state !== "List")) {
 			$scope.change_view("List");
 		}
 		$scope.mod_panel.splice($scope.mod_panel.indexOf(mod), 1);
@@ -99,11 +120,7 @@ function mods_list_ctrl($scope, Node_Module) {
 
 	$scope.panel_op = function(mod) {
 		if ($scope.mod_list[mod.mod_index].panel_button === "Add") {
-			$scope.mod_panel.push(mod);
-			$scope.mod_list[mod.mod_index].panel_button = "Remove";
-			if (($scope.mod_panel.length > 1) && ($scope.views["Compare"] === "disabled")) {
-				$scope.views["Compare"] = "";
-			}
+			$scope.add_to_panel(mod);
 		} else if ($scope.mod_list[mod.mod_index].panel_button === "Remove") {
 			$scope.remove_from_panel(mod);
 		}
