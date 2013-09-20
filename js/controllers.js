@@ -9,14 +9,28 @@ function mods_list_ctrl($scope, Node_Module) {
 	$scope.mod_order = "Downloads";
 	$scope.views = {"List": "active", "Detail": "disabled", "Compare": "disabled"};
 	$scope.view_state = "List";
+	$scope.detail_mod;
 	$scope.mod_list = Node_Module.query({mod_offset: $scope.mod_offset, mod_order: $scope.mod_order},
 		function success() {
-			for (var i = 0; i < $scope.mod_list.length; i++) {
-				$scope.mod_list[i].mod_index = i;
-				$scope.mod_list[i].panel_button = "Add";
-				$scope.mod_list[i].more_button = "More";
-				$scope.mod_list[i].show_more = false;
+			if ($scope.mod_list.length < 1) {
+				alert("Queried 0 modules!");
+				return;
 			}
+			for (var i = 0; i < $scope.mod_list.length; i++) {
+				var panel_index = $scope.panel_contains($scope.mod_list[i].name);
+				if (panel_index === -1) {
+					$scope.mod_list[i].mod_index = i;
+					$scope.mod_list[i].more_button = "More";
+					$scope.mod_list[i].show_more = false;
+					$scope.mod_list[i].panel_button = "Add";
+				} else {
+					$scope.mod_panel[panel_index].mod_index = i;
+					$scope.mod_panel[panel_index].more_button = "More";
+					$scope.mod_panel[panel_index].show_more = false;
+					$scope.mod_list[i] = $scope.mod_panel[panel_index];
+				}
+			}
+			$scope.detail_mod = $scope.mod_list[0];
 	}, function error() {
 		console.log("Could not query initial modules.");
 	});
@@ -27,6 +41,14 @@ function mods_list_ctrl($scope, Node_Module) {
 		} else {
 			return "btn btn-inverse";
 		}
+	}
+
+	$scope.item_selected_style = function(mod) {
+		console.log("item_selected_style");
+		if ($scope.detail_mod === mod) {
+			return "{background-color: #6199bd;}";
+		}
+		return "";
 	}
 
 	$scope.post_mod = function() {
@@ -69,10 +91,18 @@ function mods_list_ctrl($scope, Node_Module) {
 		Node_Module.query({mod_offset: $scope.mod_offset, mod_order: $scope.mod_order},
 		function success(data) {
 			for (var i = 0; i < data.length; i++) {
-				data[i].mod_index = i;
-				data[i].panel_button = "Add";
-				data[i].more_button = "More";
-				data[i].show_more = false;
+				var panel_index = $scope.panel_contains(data[i].name);
+				if (panel_index === -1) {
+					data[i].mod_index = i;
+					data[i].more_button = "More";
+					data[i].show_more = false;
+					data[i].panel_button = "Add";
+				} else {
+					$scope.mod_panel[panel_index].mod_index = i;
+					$scope.mod_panel[panel_index].more_button = "More";
+					$scope.mod_panel[panel_index].show_more = false;
+					data[i] = $scope.mod_panel[panel_index];
+				}
 			}
 			$scope.mod_list = data;
 		}, function error() {
@@ -97,8 +127,9 @@ function mods_list_ctrl($scope, Node_Module) {
 		if (($scope.mod_panel.length >= 1) && ($scope.views["Compare"] === "disabled")) {
 			$scope.views["Compare"] = "";
 		}
-		$scope.mod_panel.push(mod);
 		$scope.mod_list[mod.mod_index].panel_button = "Remove";
+		$scope.mod_panel.push(mod);
+		return ($scope.mod_panel.length-1);
 	}
 
 	$scope.remove_from_panel = function(mod) {
@@ -114,17 +145,67 @@ function mods_list_ctrl($scope, Node_Module) {
 		if (($scope.mod_panel.length <= 1) && ($scope.view_state !== "List")) {
 			$scope.change_view("List");
 		}
-		$scope.mod_panel.splice($scope.mod_panel.indexOf(mod), 1);
 		$scope.mod_list[mod.mod_index].panel_button = "Add";
+		if (mod === $scope.detail_mod) {
+			$scope.next_detail($scope.detail_mod);
+		}
+		$scope.mod_panel.splice($scope.mod_panel.indexOf(mod), 1);
 	};
 
 	$scope.panel_op = function(mod) {
 		if ($scope.mod_list[mod.mod_index].panel_button === "Add") {
-			$scope.add_to_panel(mod);
+			var panel_index = $scope.add_to_panel(mod);
+			return panel_index;
 		} else if ($scope.mod_list[mod.mod_index].panel_button === "Remove") {
 			$scope.remove_from_panel(mod);
+			return -1;
 		}
 	};
+
+	$scope.panel_contains = function(mod_name) {
+		for (var i = 0; i < $scope.mod_panel.length; i++) {
+			if ($scope.mod_panel[i].name === mod_name) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	$scope.prev_detail = function(mod) {
+		if ($scope.mod_panel.length < 2) {
+			return;
+		}
+
+		var panel_index = $scope.panel_contains(mod.name);
+		panel_index = (panel_index === 0) ? ($scope.mod_panel.length-1) : (panel_index-1);
+		$scope.detail_mod = $scope.mod_panel[panel_index];
+	}
+
+	$scope.next_detail = function(mod) {
+		if ($scope.mod_panel.length < 2) {
+			return;
+		}
+		var panel_index = $scope.panel_contains(mod.name);
+		panel_index = (panel_index === $scope.mod_panel.length-1) ? (0) : (panel_index+1);
+		$scope.detail_mod = $scope.mod_panel[panel_index];
+	}
+
+	$scope.select_detail = function(mod) {
+		if ($scope.view_state !== "Detail") {
+			$scope.go_to_detail(mod);
+		} else {
+			$scope.detail_mod = $scope.mod_panel[$scope.mod_panel.indexOf(mod)];
+		}
+	}
+
+	$scope.go_to_detail = function(mod) {
+		var panel_index = $scope.panel_contains(mod.name);
+		if (panel_index === -1) {
+			panel_index = $scope.panel_op(mod);
+		}
+		$scope.detail_mod = $scope.mod_panel[panel_index];
+		$scope.change_view("Detail");
+	}
 
 	$scope.show_more_mods = function() {
 		$scope.mod_offset = $scope.mod_list.length;
@@ -135,16 +216,25 @@ function mods_list_ctrl($scope, Node_Module) {
 				}
 				var index_offset = $scope.mod_list.length;
 				for (var i = 0; i < data.length; i++) {
-					data[i].mod_index = i + index_offset;
-					data[i].panel_button = "Add";
-					data[i].more_button = "More";
-					data[i].show_more = false;
+					var panel_index = $scope.panel_contains(data[i].name);
+					if (panel_index === -1) {
+						data[i].mod_index = i + index_offset;
+						data[i].more_button = "More";
+						data[i].show_more = false;
+						data[i].panel_button = "Add";
+					} else {
+						$scope.mod_panel[panel_index].mod_index = i + index_offset;
+						$scope.mod_panel[panel_index].more_button = "More";
+						$scope.mod_panel[panel_index].show_more = false;
+						data[i] = $scope.mod_panel[panel_index];
+					}
 				}
 				$scope.mod_list = $scope.mod_list.concat(data);
 			}, function error() {
 				console.log("Could not query more modules.");
 		});
 	};
+
 }
 
 function mods_detail_ctrl($scope, $routeParams, Node_Module) {
