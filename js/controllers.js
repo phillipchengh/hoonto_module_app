@@ -10,30 +10,32 @@ function mods_list_ctrl($scope, Node_Module) {
 	$scope.views = {"List": "active", "Detail": "disabled", "Compare": "disabled"};
 	$scope.view_state = "List";
 	$scope.detail_mod;
-	$scope.mod_list = Node_Module.query({mod_offset: $scope.mod_offset, mod_order: $scope.mod_order},
-		function success() {
-			if ($scope.mod_list.length < 1) {
-				alert("Queried 0 modules!");
-				return;
-			}
-			for (var i = 0; i < $scope.mod_list.length; i++) {
-				var panel_index = $scope.panel_contains($scope.mod_list[i].name);
-				if (panel_index === -1) {
-					$scope.mod_list[i].mod_index = i;
-					$scope.mod_list[i].more_button = "More";
-					$scope.mod_list[i].show_more = false;
-					$scope.mod_list[i].panel_button = "Add";
-				} else {
-					$scope.mod_panel[panel_index].mod_index = i;
-					$scope.mod_panel[panel_index].more_button = "More";
-					$scope.mod_panel[panel_index].show_more = false;
-					$scope.mod_list[i] = $scope.mod_panel[panel_index];
-				}
-			}
+	Node_Module.query({mod_offset: $scope.mod_offset, mod_order: $scope.mod_order},
+		function success(data) {
+			$scope.set_mod_info(data, 0);
+			$scope.mod_list = data;
 			$scope.detail_mod = $scope.mod_list[0];
 	}, function error() {
 		console.log("Could not query initial modules.");
 	});
+
+	$scope.set_mod_info = function(data, offset) {
+		for (var i = 0; i < data.length; i++) {
+			var panel_index = $scope.panel_contains(data[i].name);
+			if (panel_index === -1) {
+				data[i].mod_index = i + offset;
+				data[i].more_button = "More";
+				data[i].show_more = false;
+				data[i].panel_button = "Add";
+				data[i].bg_color = "background-color: yellow;";
+			} else {
+				$scope.mod_panel[panel_index].mod_index = i;
+				$scope.mod_panel[panel_index].more_button = "More";
+				$scope.mod_panel[panel_index].show_more = false;
+				data[i] = $scope.mod_panel[panel_index];
+			}
+		}
+	}
 
 	$scope.button_class = function(mod) {
 		if (mod.panel_button === "Add") {
@@ -90,20 +92,7 @@ function mods_list_ctrl($scope, Node_Module) {
 		$scope.mod_order = order;
 		Node_Module.query({mod_offset: $scope.mod_offset, mod_order: $scope.mod_order},
 		function success(data) {
-			for (var i = 0; i < data.length; i++) {
-				var panel_index = $scope.panel_contains(data[i].name);
-				if (panel_index === -1) {
-					data[i].mod_index = i;
-					data[i].more_button = "More";
-					data[i].show_more = false;
-					data[i].panel_button = "Add";
-				} else {
-					$scope.mod_panel[panel_index].mod_index = i;
-					$scope.mod_panel[panel_index].more_button = "More";
-					$scope.mod_panel[panel_index].show_more = false;
-					data[i] = $scope.mod_panel[panel_index];
-				}
-			}
+			$scope.set_mod_info(data, 0);
 			$scope.mod_list = data;
 		}, function error() {
 			console.log("Could not query initial modules.");
@@ -214,21 +203,8 @@ function mods_list_ctrl($scope, Node_Module) {
 				if (data.length < 1) {
 					return;
 				}
-				var index_offset = $scope.mod_list.length;
-				for (var i = 0; i < data.length; i++) {
-					var panel_index = $scope.panel_contains(data[i].name);
-					if (panel_index === -1) {
-						data[i].mod_index = i + index_offset;
-						data[i].more_button = "More";
-						data[i].show_more = false;
-						data[i].panel_button = "Add";
-					} else {
-						$scope.mod_panel[panel_index].mod_index = i + index_offset;
-						$scope.mod_panel[panel_index].more_button = "More";
-						$scope.mod_panel[panel_index].show_more = false;
-						data[i] = $scope.mod_panel[panel_index];
-					}
-				}
+				var offset = $scope.mod_list.length;
+				$scope.set_mod_info(data, offset);
 				$scope.mod_list = $scope.mod_list.concat(data);
 			}, function error() {
 				console.log("Could not query more modules.");
