@@ -142,13 +142,20 @@ function mods_list_ctrl($scope, Node_Module) {
 	};
 
 	$scope.panel_op = function(mod) {
-		if ($scope.mod_list[mod.mod_index].panel_button === "Add") {
+		if ($scope.panel_contains(mod.name) === -1) {
 			var panel_index = $scope.add_to_panel(mod);
-			return panel_index;
-		} else if ($scope.mod_list[mod.mod_index].panel_button === "Remove") {
+			return panel_index;			
+		} else {
 			$scope.remove_from_panel(mod);
-			return -1;
+			return -1;			
 		}
+		// if ($scope.mod_list[mod.mod_index].panel_button === "Add") {
+		// 	var panel_index = $scope.add_to_panel(mod);
+		// 	return panel_index;
+		// } else if ($scope.mod_list[mod.mod_index].panel_button === "Remove") {
+		// 	$scope.remove_from_panel(mod);
+		// 	return -1;
+		// }
 	};
 
 	$scope.panel_contains = function(mod_name) {
