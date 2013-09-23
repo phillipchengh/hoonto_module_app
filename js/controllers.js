@@ -27,7 +27,7 @@ function mods_list_ctrl($scope, Node_Module) {
 				data[i].more_button = "More";
 				data[i].show_more = false;
 				data[i].panel_button = "Add";
-				data[i].bg_color = "background-color: yellow;";
+				data[i].bg_color = {backgroundColor: 'yellow'};
 			} else {
 				$scope.mod_panel[panel_index].mod_index = i;
 				$scope.mod_panel[panel_index].more_button = "More";
@@ -45,10 +45,10 @@ function mods_list_ctrl($scope, Node_Module) {
 		}
 	}
 
-	$scope.item_selected_style = function(mod) {
+	$scope.item_selected = function(mod) {
 		console.log("item_selected_style");
 		if ($scope.detail_mod === mod) {
-			return "{background-color: #6199bd;}";
+			return {backgroundColor: '#6199bd'};
 		}
 		return "";
 	}

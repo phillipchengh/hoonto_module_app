@@ -23,7 +23,7 @@
 			</ul>
 			<div class="mod-name">Module Panel</div>
 		</div>
-		<div class="mod-panel-item" ng-repeat="mod in mod_panel" ng-style="{{mod.bg_color}}">
+		<div class="mod-panel-item" ng-repeat="mod in mod_panel" ng-style="item_selected(mod)">
 			<p ng-class="mod-p">{{mod.name}}</p>
 			<button ng-click="select_detail(mod)">Detail</button>
 			<button ng-click="remove_from_panel(mod)">Remove</button>
