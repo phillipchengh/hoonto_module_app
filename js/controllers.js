@@ -10,6 +10,7 @@ function mods_list_ctrl($scope, Node_Module) {
 	$scope.views = {"List": "active", "Detail": "disabled", "Compare": "disabled"};
 	$scope.view_state = "List";
 	$scope.detail_mod;
+	$scope.compare_mod;
 	Node_Module.query({mod_offset: $scope.mod_offset, mod_order: $scope.mod_order},
 		function success(data) {
 			$scope.set_mod_info(data, 0);
@@ -27,9 +28,8 @@ function mods_list_ctrl($scope, Node_Module) {
 				data[i].more_button = "More";
 				data[i].show_more = false;
 				data[i].panel_button = "Add";
-				data[i].bg_color = {backgroundColor: 'yellow'};
 			} else {
-				$scope.mod_panel[panel_index].mod_index = i;
+				$scope.mod_panel[panel_index].mod_index = i + offset;
 				$scope.mod_panel[panel_index].more_button = "More";
 				$scope.mod_panel[panel_index].show_more = false;
 				data[i] = $scope.mod_panel[panel_index];
@@ -46,9 +46,11 @@ function mods_list_ctrl($scope, Node_Module) {
 	}
 
 	$scope.item_selected = function(mod) {
-		console.log("item_selected_style");
 		if ($scope.detail_mod === mod) {
-			return {backgroundColor: '#6199bd'};
+			return {backgroundColor: '#cfe0eb'};
+		}
+		if ($scope.compare_mod === mod) {
+			return {backgroundColor: '#ead6ea'}
 		}
 		return "";
 	}
@@ -116,6 +118,9 @@ function mods_list_ctrl($scope, Node_Module) {
 		if (($scope.mod_panel.length >= 1) && ($scope.views["Compare"] === "disabled")) {
 			$scope.views["Compare"] = "";
 		}
+		if ($scope.mod_panel.length === 1) {
+			$scope.compare_mod = mod;
+		}
 		$scope.mod_list[mod.mod_index].panel_button = "Remove";
 		$scope.mod_panel.push(mod);
 		return ($scope.mod_panel.length-1);
@@ -136,7 +141,18 @@ function mods_list_ctrl($scope, Node_Module) {
 		}
 		$scope.mod_list[mod.mod_index].panel_button = "Add";
 		if (mod === $scope.detail_mod) {
-			$scope.next_detail($scope.detail_mod);
+			if ($scope.mod_panel[$scope.mod_panel.length-1] === mod) {
+				$scope.prev_detail($scope.detail_mod);
+			} else {
+				$scope.next_detail($scope.detail_mod);				
+			}
+		}
+		if (mod === $scope.compare_mod) {
+			if ($scope.mod_panel[$scope.mod_panel.length-1] === mod) {
+				$scope.prev_compare($scope.compare_mod);
+			} else {
+				$scope.next_compare($scope.compare_mod);				
+			}
 		}
 		$scope.mod_panel.splice($scope.mod_panel.indexOf(mod), 1);
 	};
@@ -149,13 +165,6 @@ function mods_list_ctrl($scope, Node_Module) {
 			$scope.remove_from_panel(mod);
 			return -1;			
 		}
-		// if ($scope.mod_list[mod.mod_index].panel_button === "Add") {
-		// 	var panel_index = $scope.add_to_panel(mod);
-		// 	return panel_index;
-		// } else if ($scope.mod_list[mod.mod_index].panel_button === "Remove") {
-		// 	$scope.remove_from_panel(mod);
-		// 	return -1;
-		// }
 	};
 
 	$scope.panel_contains = function(mod_name) {
@@ -171,7 +180,6 @@ function mods_list_ctrl($scope, Node_Module) {
 		if ($scope.mod_panel.length < 2) {
 			return;
 		}
-
 		var panel_index = $scope.panel_contains(mod.name);
 		panel_index = (panel_index === 0) ? ($scope.mod_panel.length-1) : (panel_index-1);
 		$scope.detail_mod = $scope.mod_panel[panel_index];
@@ -186,11 +194,37 @@ function mods_list_ctrl($scope, Node_Module) {
 		$scope.detail_mod = $scope.mod_panel[panel_index];
 	}
 
-	$scope.select_detail = function(mod) {
-		if ($scope.view_state !== "Detail") {
+	$scope.prev_compare = function(mod) {
+		if ($scope.mod_panel.length < 2) {
+			return;
+		}
+		var panel_index = $scope.panel_contains(mod.name);
+		panel_index = (panel_index === 0) ? ($scope.mod_panel.length-1) : (panel_index-1);
+		if ($scope.mod_panel[panel_index] === $scope.detail_mod) {
+			$scope.prev_compare($scope.detail_mod);
+		}
+		$scope.compare_mod = $scope.mod_panel[panel_index];
+	}
+
+	$scope.next_compare = function(mod) {
+		if ($scope.mod_panel.length < 2) {
+			return;
+		}
+		var panel_index = $scope.panel_contains(mod.name);
+		panel_index = (panel_index === $scope.mod_panel.length-1) ? (0) : (panel_index+1);
+		if ($scope.mod_panel[panel_index] === $scope.detail_mod) {
+			$scope.next_compare($scope.detail_mod);
+		}
+		$scope.compare_mod = $scope.mod_panel[panel_index];
+	}
+
+	$scope.select_item = function(mod) {
+		if ($scope.view_state === "List") {
 			$scope.go_to_detail(mod);
-		} else {
+		} else if ($scope.view_state === "Detail") {
 			$scope.detail_mod = $scope.mod_panel[$scope.mod_panel.indexOf(mod)];
+		} else if ($scope.view_state === "Compare") {
+			$scope.compare_mod = $scope.mod_panel[$scope.mod_panel.indexOf(mod)];
 		}
 	}
 

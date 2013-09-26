@@ -15,18 +15,23 @@
 	</form> -->
 	
 	<div class="mod-panel">
-		<div class="mod-panel-item">
+		<div class="mod-panel-title">
 			<ul class="nav nav-tabs" style="float: center;">
 				<li ng-class="views['List']"><a ng-click="change_view('List')">List</a></li>
 				<li ng-class="views['Detail']"><a ng-click="change_view('Detail')">Detail</a></li>
 				<li ng-class="views['Compare']"><a ng-click="change_view('Compare')">Compare</a></li>
 			</ul>
-			<div class="mod-name">Module Panel</div>
+			<div class="mod-name" style="margin-left: 2px;">Module Panel</div>
 		</div>
 		<div class="mod-panel-item" ng-repeat="mod in mod_panel" ng-style="item_selected(mod)">
-			<p ng-class="mod-p">{{mod.name}}</p>
-			<button ng-click="select_detail(mod)">Detail</button>
-			<button ng-click="remove_from_panel(mod)">Remove</button>
+			<a ng-click="select_item(mod)">
+			<span class="hyperspan">
+			<!-- <p ng-class="mod-p">{{mod.name}}</p> -->
+			{{mod.name}}
+			<!-- <button ng-click="select_detail(mod)">{{mod.name}}</button> -->
+			<button class="close" ng-click="remove_from_panel(mod)">x</button>
+			</span>
+			</a>
 		</div>
 	</div>
 	<div ng-switch on="view_state">
@@ -46,12 +51,12 @@
 			</div>
 		</div>
 		<div class="mod-block" ng-repeat="mod in mod_list">
-			<span class="mod-name">{{mod.name}}<br>Downloads: {{mod.downloads}}<br></span>
+			<span class="mod-name">{{mod.name}}</span>
 			<button ng-class="button_class(mod)" ng-click="panel_op(mod)">{{mod.panel_button}}</button>
 			<button class="btn" ng-click="go_to_detail(mod)">Detail</button>
 			<p class="mod-desc">{{mod.description}}</p>
 			<a ng-click="more_toggle(mod)">{{mod.more_button}}</a>
-			<p class="mod-detail" ng-show="mod.show_more">Version: {{mod.version}}<br>Added: {{mod.add_date}}<br>Last Modified: {{mod.mod_date}}</p>
+			<p class="mod-detail" ng-show="mod.show_more">Downloads: {{mod.downloads}}<br>Version: {{mod.version}}<br>Added: {{mod.add_date}}<br>Last Modified: {{mod.mod_date}}</p>
 		</div>
 		<div class="mod-block">
 			<button ng-click="show_more_mods()">Show more</button>
@@ -61,8 +66,8 @@
 			<div class="mod-block">
 				<span class="mod-name">Module in Detail</span>
 				<p class="mod-desc">Look through them all!</p>
-				<button class="btn" ng-click="prev_detail(detail_mod)">Prev</button>
-				<button class="btn" ng-click="next_detail(detail_mod)">Next</button>
+				<button class="btn" ng-click="prev_detail(detail_mod)">Prev Detail</button>
+				<button class="btn" ng-click="next_detail(detail_mod)">Next Detail</button>
 			</div>
 			<div class="mod-block">
 				<!-- <button ng-class="button_class(mod)" ng-click="panel_op(mod)">{{mod.panel_button}}</button> -->
@@ -94,7 +99,23 @@
 			</div>
 		</div>		
 		<div ng-switch-when="Compare" class="mod-container">
-			<div class="mod-compare-block" ng-repeat="mod in mod_compare_list">
+			<div class="mod-block">
+				<span class="mod-name">Compare Two Modules</span>
+				<p class="mod-desc">Compare them!</p>
+				<button class="btn" ng-click="prev_detail(detail_mod)">Prev Detail</button>
+				<button class="btn" ng-click="next_detail(detail_mod)">Next Detail</button>
+				<button class="btn" ng-click="prev_compare(compare_mod)">Prev Compare</button>
+				<button class="btn" ng-click="next_compare(compare_mod)">Next Compare</button>
+			</div>
+			<div class="mod-compare-left">
+			<span class="mod-name">{{detail_mod.name}} Downloads: {{detail_mod.downloads}}<br></span>
+				<p class="mod-desc">{{detail_mod.description}}</p>
+				<p class="mod-detail">Version: {{detail_mod.version}}<br>Added: {{detail_mod.add_date}}<br>Last Modified: {{detail_mod.mod_date}}</p>	
+			</div>
+			<div class="mod-compare-right">
+				<span class="mod-name">{{compare_mod.name}} Downloads: {{compare_mod.downloads}}<br></span>
+				<p class="mod-desc">{{compare_mod.description}}</p>
+				<p class="mod-detail">Version: {{compare_mod.version}}<br>Added: {{compare_mod.add_date}}<br>Last Modified: {{compare_mod.mod_date}}</p>	
 			</div>
 		</div>
 	</div>
