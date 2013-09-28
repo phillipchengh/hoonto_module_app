@@ -7,10 +7,11 @@ function mods_list_ctrl($scope, Node_Module) {
 	$scope.mod_date = "";
 	$scope.mod_offset = 0;
 	$scope.mod_order = "Downloads";
-	$scope.views = {"List": "active", "Detail": "disabled", "Compare": "disabled"};
+	$scope.views = {"List": "active", "Detail": "disabled", "Compare": "disabled", "Submit": ""};
 	$scope.view_state = "List";
 	$scope.detail_mod;
 	$scope.compare_mod;
+
 	Node_Module.query({mod_offset: $scope.mod_offset, mod_order: $scope.mod_order},
 		function success(data) {
 			$scope.set_mod_info(data, 0);
@@ -54,20 +55,6 @@ function mods_list_ctrl($scope, Node_Module) {
 		}
 		return "";
 	}
-
-	$scope.post_mod = function() {
-		Node_Module.save({name: $scope.mod_name, description: $scope.mod_desc},
-			function(data) {
-				console.log(data, status, headers, config);
-				//$scope.mod_list[$scope.mod_list.length] = data;
-				$scope.mod_list[$scope.mod_list.length] = {name: $scope.mod_name, description: $scope.mod_desc};
-			},
-			function(data, status, headers, config) {
-				alert("You submitted an explosion.");
-				console.error(data);
-		});
-		//this.mod_list = Node_Module.query();
-	};
 
 	$scope.change_view = function(view) {
 		if ($scope.view_state === view) {
@@ -118,6 +105,9 @@ function mods_list_ctrl($scope, Node_Module) {
 		if (($scope.mod_panel.length >= 1) && ($scope.views["Compare"] === "disabled")) {
 			$scope.views["Compare"] = "";
 		}
+		if ($scope.mod_panel.length === 0) {
+			$scope.detail_mod = mod;
+		}		
 		if ($scope.mod_panel.length === 1) {
 			$scope.compare_mod = mod;
 		}
@@ -127,14 +117,14 @@ function mods_list_ctrl($scope, Node_Module) {
 	}
 
 	$scope.remove_from_panel = function(mod) {
-		if (($scope.mod_panel.length <= 2) && ($scope.views["Compare"] !== "disabled")) {
-			$scope.views["Compare"] = "disabled";
-		}
 		if (($scope.mod_panel.length === 1) && ($scope.view_state === "Compare")) {
 			$scope.change_view("Detail");
 		}
 		if ($scope.mod_panel.length <= 1) {
 			$scope.views["Detail"] = "disabled";
+		}
+		if (($scope.mod_panel.length <= 2) && ($scope.views["Compare"] !== "disabled")) {
+			$scope.views["Compare"] = "disabled";
 		}
 		if (($scope.mod_panel.length <= 1) && ($scope.view_state !== "List")) {
 			$scope.change_view("List");
@@ -252,7 +242,18 @@ function mods_list_ctrl($scope, Node_Module) {
 		});
 	};
 
+	$scope.post_mod = function() {
+		Node_Module.save({name: $scope.mod_name, description: $scope.mod_desc},
+			function(data) {
+				// console.log(data, status, headers, config);
+				// $scope.mod_list[$scope.mod_list.length] = {name: $scope.mod_name, description: $scope.mod_desc};
+			},
+			function(data, status, headers, config) {
+				alert("You submitted an explosion.");
+				console.error(data);
+		});
+	};
 }
 
-function mods_detail_ctrl($scope, $routeParams, Node_Module) {
+function mods_submit_ctrl($scope, $routeParams, Node_Module) {
 }

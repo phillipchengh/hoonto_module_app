@@ -1,19 +1,25 @@
-<div class="container">
-	<!-- <form ng-submit="post_mod()">
-		<legend>~Post a Node Module~</legend>
-		<fieldset>
-			<div class="form-group">
-				<label for="name_label">Module name</label>
-				<input type="text" class="form-control" id="name_label" placeholder="Enter module name" ng-model="mod_name" maxlength="24">
-			</div>
-			<div class="form-group">
-				<label for="id_label">Module description</label>
-				<input type="text" class="form-control" id="id_label" placeholder="Enter module description" ng-model="mod_desc" maxlength="150">
-			</div>
-			<button type="submit" class="btn btn-default">Submit</button>
-		</fieldset>
-	</form> -->
-	
+<div class="navbar navbar-inverse navbar-fixed-top">
+	<div class="container">
+		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		</button>
+		<a class="navbar-brand" href="/">Module Site Name</a>
+		<div class="nav-collapse collapse">
+			<ul class="nav navbar-nav">
+				<li><a ng-click="change_view('List')">List</a></li>
+				<li><a ng-click="change_view('Submit')">Submit</a></li>
+			</ul>
+			<form class="navbar-form form-inline pull-right">
+				<input type="text" placeholder="Register" class="form-control">
+				<input type="password" placeholder="In" class="form-control">
+				<button type="submit" class="btn">Progress</button>
+			</form>
+		</div><!--/.nav-collapse -->
+	</div>
+</div>
+<div class="container">	
 	<div class="mod-panel">
 		<div class="mod-panel-title">
 			<ul class="nav nav-tabs" style="float: center;">
@@ -26,9 +32,7 @@
 		<div class="mod-panel-item" ng-repeat="mod in mod_panel" ng-style="item_selected(mod)">
 			<a ng-click="select_item(mod)">
 			<span class="hyperspan">
-			<!-- <p ng-class="mod-p">{{mod.name}}</p> -->
 			{{mod.name}}
-			<!-- <button ng-click="select_detail(mod)">{{mod.name}}</button> -->
 			<button class="close" ng-click="remove_from_panel(mod)">x</button>
 			</span>
 			</a>
@@ -62,7 +66,7 @@
 			<button ng-click="show_more_mods()">Show more</button>
 		</div>
 		</div>
-		<div ng-switch-when="Detail" class="mod-container">
+		<div class="mod-container" ng-switch-when="Detail">
 			<div class="mod-block">
 				<span class="mod-name">Module in Detail</span>
 				<p class="mod-desc">Look through them all!</p>
@@ -71,7 +75,9 @@
 			</div>
 			<div class="mod-block">
 				<!-- <button ng-class="button_class(mod)" ng-click="panel_op(mod)">{{mod.panel_button}}</button> -->
-				<span class="mod-name">{{detail_mod.name}} Downloads: {{detail_mod.downloads}}<br></span>
+				<span class="mod-name">{{detail_mod.name}} Downloads: {{detail_mod.downloads}}<br>
+				<button ng-class="button_class(detail_mod)" ng-click="panel_op(detail_mod)">{{detail_mod.panel_button}}</button>
+				</span>
 				<p class="mod-desc">{{detail_mod.description}}</p>
 				<div>
 					<p class="mod-desc">Rings
@@ -98,7 +104,7 @@
 				<p class="mod-detail">Version: {{detail_mod.version}}<br>Added: {{detail_mod.add_date}}<br>Last Modified: {{detail_mod.mod_date}}</p>	
 			</div>
 		</div>		
-		<div ng-switch-when="Compare" class="mod-container">
+		<div class="mod-container" ng-switch-when="Compare">
 			<div class="mod-block">
 				<span class="mod-name">Compare Two Modules</span>
 				<p class="mod-desc">Compare them!</p>
@@ -108,15 +114,35 @@
 				<button class="btn" ng-click="next_compare(compare_mod)">Next Compare</button>
 			</div>
 			<div class="mod-compare-left">
-			<span class="mod-name">{{detail_mod.name}} Downloads: {{detail_mod.downloads}}<br></span>
+			<span class="mod-name">{{detail_mod.name}} Downloads: {{detail_mod.downloads}}<br>
+			<button ng-class="button_class(detail_mod)" ng-click="panel_op(detail_mod)">{{detail_mod.panel_button}}</button>
+			</span>
 				<p class="mod-desc">{{detail_mod.description}}</p>
 				<p class="mod-detail">Version: {{detail_mod.version}}<br>Added: {{detail_mod.add_date}}<br>Last Modified: {{detail_mod.mod_date}}</p>	
 			</div>
 			<div class="mod-compare-right">
-				<span class="mod-name">{{compare_mod.name}} Downloads: {{compare_mod.downloads}}<br></span>
+				<span class="mod-name">{{compare_mod.name}} Downloads: {{compare_mod.downloads}}<br>
+				<button ng-class="button_class(compare_mod)" ng-click="panel_op(compare_mod)">{{compare_mod.panel_button}}</button>
+				</span>
 				<p class="mod-desc">{{compare_mod.description}}</p>
 				<p class="mod-detail">Version: {{compare_mod.version}}<br>Added: {{compare_mod.add_date}}<br>Last Modified: {{compare_mod.mod_date}}</p>	
 			</div>
 		</div>
+	<div class="mod-container" ng-switch-when="Submit">
+		<form ng-submit="post_mod()">
+		<legend>~Post a Node Module~</legend>
+		<fieldset>
+			<div class="form-group">
+				<label for="name_label">Module name</label>
+				<input type="text" class="form-control" id="name_label" placeholder="Enter module name" ng-model="mod_name" maxlength="24">
+			</div>
+			<div class="form-group">
+				<label for="id_label">Module description</label>
+				<input type="text" class="form-control" id="id_label" placeholder="Enter module description" ng-model="mod_desc" maxlength="150">
+			</div>
+			<button type="submit" class="btn btn-default">Submit</button>
+		</fieldset>
+	</form>
+	</div>
 	</div>
 </div>

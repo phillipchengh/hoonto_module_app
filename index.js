@@ -82,8 +82,9 @@ app.post('/query', function(req, res) {
 	client.connect();
 	//console.log(req.query);
 	var query_text = 
+	//'SELECT name, description, version, downloads, extract(\'epoch\' FROM add_timestamp) AS add_date, extract(\'epoch\' FROM mod_timestamp) AS mod_date FROM mods_list 
 	//'INSERT INTO mods_list(name, description) VALUES($1, $2) RETURNING mod_name, mod_desc';
-	'INSERT INTO mods_list(name, description) VALUES($1, $2)';
+	'INSERT INTO mods_list(name, description, version) VALUES($1, $2)';
 	var query = client.query({
 		text: query_text,
 		values: [req.query.mod_name, req.query.mod_desc]
@@ -117,8 +118,8 @@ app.post('/query', function(req, res) {
 	});
 });
 
-app.get('/hello', function(req, res) {
-	res.sendfile('hello.html');
+app.get('/submit', function(req, res) {
+	res.sendfile('submit.html');
 });
 
 app.listen(app.get('port'));
