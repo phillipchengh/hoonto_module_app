@@ -80,10 +80,9 @@ app.post('/query', function(req, res) {
 		port: 5432
 	});
 	client.connect();
-	//console.log(req.query);
 	var query_text = 
 	//'SELECT name, description, version, downloads, extract(\'epoch\' FROM add_timestamp) AS add_date, extract(\'epoch\' FROM mod_timestamp) AS mod_date FROM mods_list 
-	//'INSERT INTO mods_list(name, description) VALUES($1, $2) RETURNING mod_name, mod_desc';
+	//'INSERT INTO mods_list(name, description, version, downloads, url) VALUES($1, $2, $3, $4);
 	'INSERT INTO mods_list(name, description, version) VALUES($1, $2)';
 	var query = client.query({
 		text: query_text,

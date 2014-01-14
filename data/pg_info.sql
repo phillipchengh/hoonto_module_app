@@ -49,10 +49,10 @@ SET default_with_oids = false;
 CREATE TABLE mods_list (
     name character varying(24),
     description character varying(150),
-    mod_timestamp timestamp with time zone,
     version semver,
     add_timestamp timestamp without time zone DEFAULT now() NOT NULL,
-    downloads integer DEFAULT trunc((random() * (10000)::double precision)) NOT NULL
+    downloads integer DEFAULT trunc((random() * (10000)::double precision)) NOT NULL,
+    mod_timestamp timestamp without time zone DEFAULT now() NOT NULL
 );
 
 
@@ -62,19 +62,19 @@ ALTER TABLE public.mods_list OWNER TO phillip;
 -- Data for Name: mods_list; Type: TABLE DATA; Schema: public; Owner: phillip
 --
 
-COPY mods_list (name, description, mod_timestamp, version, add_timestamp, downloads) FROM stdin;
-Super Module	Adds a cape to node full of hope	2013-09-04 21:10:25.185653-07	0.0.1	2013-09-04 21:10:25.185653	5075
-Planet Express	Reliable interplanetary delivery. Serving the Milky Way and Beyond!	2013-09-04 21:10:25.185653-07	0.0.1	2013-09-04 21:10:25.185653	7788
-<>JS	Model. View. Whatever.	2013-09-04 21:10:25.185653-07	0.0.1	2013-09-04 21:10:25.185653	4392
-Fourth	I do not like the number before this.	2013-09-04 21:10:25.185653-07	0.0.1	2013-09-04 21:10:25.185653	3577
-Test Module	This module's entire purpose is just to test POST.	2013-09-04 21:10:25.185653-07	0.0.1	2013-09-04 21:10:25.185653	215
-The Test Returns!	Just another description.	2013-09-04 21:10:25.185653-07	0.0.1	2013-09-04 21:10:25.185653	984
-Node Module	I've got it.	2013-09-04 21:10:25.185653-07	0.0.1	2013-09-04 21:10:25.185653	2286
-Another Node Module	Look even more!	2013-09-04 21:10:25.185653-07	0.0.1	2013-09-04 21:10:25.185653	4972
-24 Char Not Enough	It really isn't.	2013-09-04 21:10:25.185653-07	0.0.1	2013-09-04 21:10:25.185653	2442
-Still Not Enough	Will this work finally?	2013-09-04 21:10:25.185653-07	0.0.1	2013-09-04 21:10:25.185653	7213
-One More Time	Not the daft punk song.	2013-09-04 21:10:25.185653-07	0.0.1	2013-09-04 21:10:25.185653	4748
-undefined	undefined	\N	\N	2013-09-27 20:42:31.085802	7038
+COPY mods_list (name, description, version, add_timestamp, downloads, mod_timestamp) FROM stdin;
+Super Module	Adds a cape to node full of hope	0.0.1	2013-09-04 21:10:25.185653	5075	2013-09-30 13:30:44.214411
+Planet Express	Reliable interplanetary delivery. Serving the Milky Way and Beyond!	0.0.1	2013-09-04 21:10:25.185653	7788	2013-09-30 13:30:44.214411
+<>JS	Model. View. Whatever.	0.0.1	2013-09-04 21:10:25.185653	4392	2013-09-30 13:30:44.214411
+Fourth	I do not like the number before this.	0.0.1	2013-09-04 21:10:25.185653	3577	2013-09-30 13:30:44.214411
+Test Module	This module's entire purpose is just to test POST.	0.0.1	2013-09-04 21:10:25.185653	215	2013-09-30 13:30:44.214411
+The Test Returns!	Just another description.	0.0.1	2013-09-04 21:10:25.185653	984	2013-09-30 13:30:44.214411
+Node Module	I've got it.	0.0.1	2013-09-04 21:10:25.185653	2286	2013-09-30 13:30:44.214411
+Another Node Module	Look even more!	0.0.1	2013-09-04 21:10:25.185653	4972	2013-09-30 13:30:44.214411
+24 Char Not Enough	It really isn't.	0.0.1	2013-09-04 21:10:25.185653	2442	2013-09-30 13:30:44.214411
+Still Not Enough	Will this work finally?	0.0.1	2013-09-04 21:10:25.185653	7213	2013-09-30 13:30:44.214411
+One More Time	Not the daft punk song.	0.0.1	2013-09-04 21:10:25.185653	4748	2013-09-30 13:30:44.214411
+undefined	undefined	\N	2013-09-27 20:42:31.085802	7038	2013-09-30 13:30:44.214411
 \.
 
 
